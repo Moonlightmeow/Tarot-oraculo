@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Tarot Rider–Waite · Sistema Simbólico</title>
+<title>Tarot Rider–Waite</title>
 
 <style>
 
@@ -154,235 +154,211 @@ button:hover {
     button{font-size:14px;padding:10px 18px;}
 }
 
-</style></head>
+</style>
+</head>
 
 <body>
 
-<div class="app">
 <h1>Tarot Rider–Waite</h1>
-<div class="subtitle">Sistema simbólico de lectura profunda</div>
 
 <div class="controls">
-<button onclick="drawSingle()">Carta Guía</button>
-<button onclick="drawThree()">Trinidad</button>
-<button onclick="drawPPF()">Pasado · Presente · Futuro</button>
-<button onclick="drawShadow()">Sombra</button>
-<button onclick="drawDecision()">Decisión</button>
-<button onclick="drawCeltic()">Cruz Celta</button>
+    <button onclick="single()">1 Carta</button>
+    <button onclick="three()">3 Cartas</button>
+    <button onclick="ppf()">Pasado · Presente · Futuro</button>
 </div>
 
 <div id="reading"></div>
 
-<footer>
-Lectura simbólica · No predictiva · Trabajo consciente
-</footer>
-</div>
-
 <script>
-const tarot=[
+const tarot = [
 {
 name:"El Loco",
 img:"https://upload.wikimedia.org/wikipedia/commons/9/90/RWS_Tarot_00_Fool.jpg",
-u:"Inicio puro, fe en el viaje y apertura total a lo desconocido. Invita a confiar en el impulso vital y permitir que la experiencia guíe.",
-r:"Desorientación, miedo a avanzar o decisiones impulsivas sin conciencia."
+upright:"El inicio absoluto y el salto al vacío con fe. Representa nuevos comienzos, libertad interior y confianza en el viaje de la vida aun sin garantías. Invita a soltar el miedo y aventurarse.",
+reversed:"Imprudencia, ingenuidad, evasión de responsabilidades o miedo a avanzar."
 },
 {
 name:"El Mago",
 img:"https://upload.wikimedia.org/wikipedia/commons/d/de/RWS_Tarot_01_Magician.jpg",
-u:"Capacidad de manifestar mediante voluntad y enfoque. El poder personal está activo.",
-r:"Uso distorsionado del poder, manipulación o desconexión entre intención y acción."
+upright:"La voluntad consciente y el poder de manifestar. Indica que todas las herramientas están disponibles para crear la realidad deseada. Habla de enfoque, acción y creatividad.",
+reversed:"Manipulación, ego desmedido, bloqueo creativo o uso inconsciente del poder."
 },
 {
 name:"La Sacerdotisa",
 img:"https://upload.wikimedia.org/wikipedia/commons/8/88/RWS_Tarot_02_High_Priestess.jpg",
-u:"Sabiduría interior, intuición profunda y conocimiento no revelado. Escuchar es más importante que actuar.",
-r:"Bloqueo intuitivo o negación de la verdad interna."
+upright:"El conocimiento oculto y la intuición profunda. Simboliza el silencio, el misterio y la sabiduría interior. Invita a escuchar más que actuar.",
+reversed:"Secretos, pasividad excesiva, desconexión emocional o negación de la intuición."
 },
 {
 name:"La Emperatriz",
 img:"https://upload.wikimedia.org/wikipedia/commons/d/d2/RWS_Tarot_03_Empress.jpg",
-u:"Creatividad, abundancia y energía nutritiva que sostiene la vida.",
-r:"Estancamiento emocional o dependencia afectiva."
+upright:"La energía creadora y nutritiva. Representa abundancia, fertilidad, creatividad y amor. Indica crecimiento y disfrute de la vida.",
+reversed:"Dependencia, exceso, estancamiento por comodidad o carencia afectiva."
 },
 {
 name:"El Emperador",
 img:"https://upload.wikimedia.org/wikipedia/commons/c/c3/RWS_Tarot_04_Emperor.jpg",
-u:"Orden, estructura y liderazgo consciente. Construcción sólida.",
-r:"Control excesivo o rigidez emocional."
+upright:"El principio del orden y la estructura. Habla de autoridad, liderazgo y estabilidad. Indica control consciente y responsabilidad.",
+reversed:"Rigidez, autoritarismo, inseguridad o necesidad excesiva de control."
 },
 {
 name:"El Hierofante",
 img:"https://upload.wikimedia.org/wikipedia/commons/8/8d/RWS_Tarot_05_Hierophant.jpg",
-u:"Tradición, aprendizaje espiritual y valores compartidos.",
-r:"Dogma, rebeldía interna o ruptura de creencias obsoletas."
+upright:"La tradición espiritual y el aprendizaje guiado. Representa sistemas de creencias, enseñanza y comunidad.",
+reversed:"Dogmatismo, miedo a cuestionar o ruptura con valores impuestos."
 },
 {
 name:"Los Enamorados",
 img:"https://upload.wikimedia.org/wikipedia/commons/3/3a/RWS_Tarot_06_Lovers.jpg",
-u:"Elección consciente alineada con el corazón.",
-r:"Conflictos afectivos o decisiones desde el miedo."
+upright:"La carta de la elección consciente. Habla de vínculos profundos y decisiones alineadas con los valores del corazón.",
+reversed:"Indecisión, tentación, relaciones desequilibradas o conflicto interno."
 },
 {
 name:"El Carro",
 img:"https://upload.wikimedia.org/wikipedia/commons/9/9b/RWS_Tarot_07_Chariot.jpg",
-u:"Avance firme y victoria mediante autodominio.",
-r:"Falta de dirección o lucha interna."
+upright:"Avance decidido y victoria mediante autocontrol. Representa determinación, enfoque y movimiento hacia una meta.",
+reversed:"Prisa, arrogancia, falta de dirección o conflicto interno no resuelto."
 },
 {
 name:"La Fuerza",
 img:"https://upload.wikimedia.org/wikipedia/commons/f/f5/RWS_Tarot_08_Strength.jpg",
-u:"Coraje suave, dominio emocional y compasión.",
-r:"Inseguridad o represión interna."
+upright:"El poder interior expresado con suavidad. Habla de coraje, compasión y dominio emocional.",
+reversed:"Represión emocional, impulsividad o pérdida de límites."
 },
 {
 name:"El Ermitaño",
 img:"https://upload.wikimedia.org/wikipedia/commons/4/4d/RWS_Tarot_09_Hermit.jpg",
-u:"Búsqueda interior y retiro consciente para hallar verdad.",
-r:"Aislamiento o evasión del mundo."
+upright:"La búsqueda interior de la verdad. Representa introspección, sabiduría y retiro consciente.",
+reversed:"Aislamiento excesivo, evasión del mundo o miedo a enfrentar la verdad."
 },
 {
 name:"La Rueda de la Fortuna",
 img:"https://upload.wikimedia.org/wikipedia/commons/3/3c/RWS_Tarot_10_Wheel_of_Fortune.jpg",
-u:"Cambio, ciclos y oportunidad en movimiento.",
-r:"Resistencia al cambio o repetición de patrones."
+upright:"Los ciclos inevitables del destino. Cambios, oportunidades y giros inesperados.",
+reversed:"Resistencia al cambio o repetición inconsciente de patrones."
 },
 {
 name:"La Justicia",
 img:"https://upload.wikimedia.org/wikipedia/commons/e/e0/RWS_Tarot_11_Justice.jpg",
-u:"Verdad, equilibrio y responsabilidad consciente.",
-r:"Negación de la verdad o juicio desequilibrado."
+upright:"Equilibrio entre causa y efecto. Verdad, integridad y responsabilidad.",
+reversed:"Injusticia, autoengaño o juicio severo."
 },
 {
 name:"El Colgado",
 img:"https://upload.wikimedia.org/wikipedia/commons/2/2b/RWS_Tarot_12_Hanged_Man.jpg",
-u:"Entrega y nueva perspectiva mediante pausa.",
-r:"Estancamiento prolongado o victimismo."
+upright:"La pausa necesaria para ver desde otro ángulo. Rendición consciente.",
+reversed:"Estancamiento voluntario o victimismo."
 },
 {
 name:"La Muerte",
 img:"https://upload.wikimedia.org/wikipedia/commons/d/d7/RWS_Tarot_13_Death.jpg",
-u:"Transformación profunda y cierre necesario.",
-r:"Miedo a soltar o apego al pasado."
+upright:"Transformación profunda. Finales necesarios que abren nuevos comienzos.",
+reversed:"Resistencia al cambio o apego al pasado."
 },
 {
 name:"La Templanza",
 img:"https://upload.wikimedia.org/wikipedia/commons/f/f8/RWS_Tarot_14_Temperance.jpg",
-u:"Integración, sanación y equilibrio progresivo.",
-r:"Desequilibrio interno o dispersión."
+upright:"Integración, sanación y armonía entre opuestos.",
+reversed:"Desequilibrio, dispersión o excesos."
 },
 {
 name:"El Diablo",
 img:"https://upload.wikimedia.org/wikipedia/commons/5/55/RWS_Tarot_15_Devil.jpg",
-u:"Confrontación con las sombras y ataduras.",
-r:"Liberación de dependencias y toma de conciencia."
+upright:"Ataduras internas, deseos inconscientes y sombras no integradas.",
+reversed:"Liberación, toma de conciencia y ruptura de cadenas."
 },
 {
 name:"La Torre",
 img:"https://upload.wikimedia.org/wikipedia/commons/5/53/RWS_Tarot_16_Tower.jpg",
-u:"Ruptura de estructuras falsas y revelación.",
-r:"Cambio resistido o crisis contenida."
+upright:"Colapso de estructuras falsas. Revelación abrupta y verdad liberadora.",
+reversed:"Negación del cambio o crisis interna prolongada."
 },
 {
 name:"La Estrella",
 img:"https://upload.wikimedia.org/wikipedia/commons/d/db/RWS_Tarot_17_Star.jpg",
-u:"Esperanza, fe y sanación después del caos.",
-r:"Pérdida de confianza o desaliento."
+upright:"Esperanza renovada, fe y sanación espiritual.",
+reversed:"Desánimo, pérdida de fe o desconexión."
 },
 {
 name:"La Luna",
 img:"https://upload.wikimedia.org/wikipedia/commons/7/7f/RWS_Tarot_18_Moon.jpg",
-u:"Inconsciente, miedos y procesos internos profundos.",
-r:"Confusión aclarada y verdad emergente."
+upright:"Inconsciente, miedos y emociones profundas.",
+reversed:"Claridad emergente o salida de la confusión."
 },
 {
 name:"El Sol",
 img:"https://upload.wikimedia.org/wikipedia/commons/1/17/RWS_Tarot_19_Sun.jpg",
-u:"Claridad, vitalidad y gozo auténtico.",
-r:"Bloqueo de la alegría o ego desalineado."
+upright:"Alegría, vitalidad, éxito y verdad revelada.",
+reversed:"Bloqueo emocional o ego inflado."
 },
 {
 name:"El Juicio",
 img:"https://upload.wikimedia.org/wikipedia/commons/d/dd/RWS_Tarot_20_Judgement.jpg",
-u:"Llamado del alma y renacimiento.",
-r:"Culpa persistente o negación del cambio."
+upright:"Despertar del alma, perdón y renacimiento.",
+reversed:"Culpa persistente o miedo al llamado interior."
 },
 {
 name:"El Mundo",
 img:"https://upload.wikimedia.org/wikipedia/commons/f/ff/RWS_Tarot_21_World.jpg",
-u:"Plenitud, integración y culminación del viaje.",
-r:"Ciclo incompleto o miedo a cerrar etapas."
+upright:"Culminación, plenitud e integración total.",
+reversed:"Cierre incompleto o resistencia a завершar un ciclo."
 }
 ];
 
-const reading=document.getElementById("reading");
-
-function draw(){
-    const c=tarot[Math.floor(Math.random()*tarot.length)];
-    const inv=Math.random()<0.5;
+function drawCard() {
+    const c = tarot[Math.floor(Math.random() * tarot.length)];
+    const inverted = Math.random() < 0.5;
     return {
-        name:c.name,
-        img:c.img,
-        orientation:inv?"Invertida":"Derecha",
-        meaning:inv?c.r:c.u,
-        inv
+        ...c,
+        inverted,
+        orientation: inverted ? "Invertida" : "Derecha",
+        meaning: inverted ? c.reversed : c.upright
     };
 }
-function render(card,pos){
-    const d=document.createElement("div");
-    d.className="card";
-    d.innerHTML=`
-        <img src="${card.img}" class="${card.inv?'inverted':''}">
-        <h3>${card.name}</h3>
-        <div class="position">${pos}</div>
-        <div class="orientation">${card.orientation}</div>
-        <p>${card.meaning}</p>`;
-    reading.appendChild(d);
-}
-function summary(cards){
-    const inv=cards.filter(c=>c.inv).length;
-    const msg=inv>cards.length/2
-    ?"La lectura indica un proceso interno intenso, revisión profunda y trabajo de integración."
-    :"La energía fluye hacia claridad, coherencia y avance consciente.";
-    reading.innerHTML+=`
-    <div class="summary">
-    <h3>Lectura del Conjunto</h3>
-    <p>${msg}</p>
-    </div>`;
-}
-function clear(){reading.innerHTML=""}
 
-/* Tiradas */
-function drawSingle(){clear();render(draw(),"Mensaje central")}
-function drawThree(){
-    clear();
-    const c=[draw(),draw(),draw()];
-    ["Origen","Proceso","Resultado"].forEach((p,i)=>render(c[i],p));
-    summary(c);
+function renderCard(card, position="") {
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+        <img src="${card.img}" class="${card.inverted ? "inverted" : ""}">
+        <h3>${card.name}</h3>
+        ${position ? `<div class="position">${position}</div>` : ""}
+        <div class="orientation">${card.orientation}</div>
+        <p>${card.meaning}</p>
+    `;
+    reading.appendChild(div);
 }
-function drawPPF(){
-    clear();
-    const c=[];
-    ["Pasado","Presente","Futuro"].forEach(p=>{const x=draw();c.push(x);render(x,p)});
-    summary(c);
+
+function renderSummary(cards) {
+    if (cards.length < 2) return;
+    const inverted = cards.filter(c => c.inverted).length;
+    const text = inverted > cards.length / 2
+        ? "El conjunto revela procesos internos, resistencias o trabajo de sombra."
+        : "El conjunto muestra coherencia, apertura y avance consciente.";
+    reading.innerHTML += `<div class="summary"><h3>Interpretación del Conjunto</h3><p>${text}</p></div>`;
 }
-function drawShadow(){
-    clear();
-    const c=[];
-    ["Sombra","Bloqueo","Raíz","Integración","Don"].forEach(p=>{const x=draw();c.push(x);render(x,p)});
-    summary(c);
+
+function single() {
+    reading.innerHTML = "";
+    renderCard(drawCard());
 }
-function drawDecision(){
-    clear();
-    const c=[];
-    ["Camino A","Camino A","Camino B","Camino B","Consejo"].forEach(p=>{const x=draw();c.push(x);render(x,p)});
-    summary(c);
+
+function three() {
+    reading.innerHTML = "";
+    const cards = [drawCard(), drawCard(), drawCard()];
+    cards.forEach(c => renderCard(c));
+    renderSummary(cards);
 }
-function drawCeltic(){
-    clear();
-    const c=[];
-    ["Situación","Desafío","Base","Pasado","Consciente","Futuro","Consultante","Entorno","Esperanzas","Resultado"]
-    .forEach(p=>{const x=draw();c.push(x);render(x,p)});
-    summary(c);
+
+function ppf() {
+    reading.innerHTML = "";
+    const cards = [];
+    ["Pasado","Presente","Futuro"].forEach(pos => {
+        const c = drawCard();
+        cards.push(c);
+        renderCard(c, pos);
+    });
+    renderSummary(cards);
 }
 </script>
 
