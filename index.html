@@ -58,14 +58,15 @@ button:hover {
 
 /* ===== LECTURA ===== */
 
-##reading {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 260px);
+#reading {
+    display: flex;
+    flex-direction: row;
     justify-content: center;
+    align-items: flex-start;
     gap: 26px;
     width: 100%;
-}
-/* ===== CARTA ===== */
+    flex-wrap: nowrap;
+}/* ===== CARTA ===== */
 
 .card {
     background: rgba(30, 8, 60, 0.55);
